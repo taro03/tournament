@@ -11,7 +11,7 @@ def deleteMatches(db, c):
     db.commit()
     db.close()
 
-def Players(db, c):
+def deletePlayers(db, c):
     query = "DELETE * FROM players"
     c.execute(query)
     db.commit()
