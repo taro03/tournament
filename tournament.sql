@@ -1,23 +1,16 @@
-CREATE DATABASE tournamentdb;
+CREATE DATABASE tournament;
 
-\connect tournamentdb;
+\connect tournament;
 
-CREATE TABLE tournaments (
-    name VARCHAR PRIMARY KEY NOT NULL,
-    event VARCHAR NOT NULL
-);
-
-create table contestants (
-    id BIGSERIAL PRIMARY KEY,
-    name VARCHAR NOT NULL,
-    tournament VARCHAR REFERENCES tournaments(name),
-    wins BIGINT NOT NULL DEFAULT 0,
-    losses BIGINT NOT NULL DEFAULT 0
+create table players (
+    playerID BIGSERIAL PRIMARY KEY,
+    playerName VARCHAR NOT NULL,
+    numWin BIGINT NOT NULL DEFAULT 0,
+    numLoss BIGINT NOT NULL DEFAULT 0
 );
 
 create table matches (
-    id BIGSERIAL PRIMARY KEY,
-    tournament VARCHAR REFERENCES tournaments(name),
-    winner BIGINT REFERENCES contestants(id),
-    loser BIGINT REFERENCES contestants(id)
+    matchID BIGSERIAL PRIMARY KEY,
+    winnerID BIGINT REFERENCES players(playerID),
+    loserD BIGINT REFERENCES players(playerID)
 );
