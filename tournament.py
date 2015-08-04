@@ -69,7 +69,7 @@ def playerStandings():
     db.close()
     return c.fetchall()
 
-def reportMatch(winner, loser):
+def reportMatch(winnerID, loserID):
     """Records the outcome of a single match between two players.
 
     Args:
@@ -80,21 +80,21 @@ def reportMatch(winner, loser):
     c = db.cursor()
     query1 = """INSERT INTO matches(winner, loser)
                VALUES (%s, %s)"""
-    match_report = (winner, loser)
+    match_report = (winnerID, loserID)
     c.execute(query1, match_report)
     db.commit()
 
     query2 = """UPDATE players
-               SET wins += 1
+               SET numWin += 1
                WHERE playerID= (%s)"""
-    match_report = (winner)
+    match_report = (winnerID)
     c.excute(query2,match_report)
     db.commit()
 
     query3 = """UPDATE players
-               SET losses += 1
+               SET numLoss += 1
                WHERE playerID = (%s)"""
-    match_report = (loser)
+    match_report = (loserID)
     c.execute(query3, match_report)
     db.commit()
 
