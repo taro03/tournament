@@ -1,37 +1,46 @@
+#!/usr/bin/env python
+# 
+# tournament.py -- implementation of a Swiss-system tournament
+#
+
 import psycopg2
 
 def connect():
     """Connect to the PostgreSQL database.  Returns a database connection."""
-    return psycopg2.connect("dbname=tournament")
+    return psycopg2.connect("dbname=tournamentdb")
 
 def deleteMatches():
     """Remove all the match records from the database."""
-    db = connect('tournament.db')
+    db = connect()
     c = db.cursor()
-    query = "DELETE * FROM matches"
+    query = "DELETE FROM matches"
     c.execute(query)
+    query1 = "DELETE FROM players"
+    c.execute(query1)
+    db.commit()
     db.close()
 
-def deletePlayers(db, c):
+def deletePlayers():
     """Remove all the player records from the database."""
-    db = connect('tournament.db')
+    db = connect()
     c = db.cursor()
-    query = "DELETE * FROM players"
+    query = "DELETE FROM players"
     c.execute(query)
+    db.commit()
     db.close()
 
-def countPlayers(db, c):
+def countPlayers():
     """Returns the number of players currently registered."""
-    db = connect('tournament.db')
+    db = connect()
     c = db.cursor()
-    query = "SELECT playerID as num FROM players"
+    query = "SELECT count(playerID) as player_count FROM players"
     c.execute(query)
-    count = c.fetchall()[0][0]
+    player_count = c.fetchone()[0]
     db.close()
-    return count
+    return player_count
 
 
-def registerPlayers(playerName):
+def registerPlayer(playerName):
     """Adds a player to the tournament database.
   
     The database assigns a unique serial id number for the player.  (This
@@ -40,11 +49,12 @@ def registerPlayers(playerName):
     Args:
       name: the player's full name (need not be unique).
     """
-    db = connect('tournament.db')
+    db = connect()
     c = db.cursor()
-    query = """INSERT INTO players(playerName)
-               VALUES (%s)"""
-    c.execute(query, %playerName)
+    query = """INSERT INTO players(playerID,playerName)
+               VALUES (default, %s)"""
+    c.execute(query, (playerName,))
+    db.commit()
     db.close()
 
 def playerStandings():
@@ -60,45 +70,43 @@ def playerStandings():
         wins: the number of matches the player has won
         matches: the number of matches the player has played
     """
-    db = connect('tournament.db')
+    db = connect()
     c = db.cursor()
-    query = """SELECT playerID, playerName, numWin, numLoss
-               FROM players
-               ORDER BY numWin"""
+    query = """SELECT playerID, playerName,
+    (SELECT count(*)
+        FROM matches
+        WHERE players.playerID=matches.winner)
+    AS num_win,
+    (SELECT count(*)
+        FROM matches
+        WHERE players.playerID=matches.winner
+        OR players.playerID=matches.loser)
+    AS num_matches
+    FROM players
+    ORDER BY num_win DESC;"""
     c.execute(query)
+    matches = c.fetchall()
     db.close()
-    return c.fetchall()
+    return matches
 
-def reportMatch(winnerID, loserID):
+
+def reportMatch(winner, loser):
     """Records the outcome of a single match between two players.
 
     Args:
       winner:  the id number of the player who won
       loser:  the id number of the player who lost
     """
-    db = connect('tournament.db')
+    db = connect()
     c = db.cursor()
-    query1 = """INSERT INTO matches(winner, loser)
-               VALUES (%s, %s)"""
-    match_report = (winnerID, loserID)
-    c.execute(query1, match_report)
+    query1 = """INSERT INTO matches(matchID, winner, loser)
+               VALUES (default, %s, %s)"""
+    c.execute(query1, (winner, loser,))
     db.commit()
+    db.close()
+    
 
-    query2 = """UPDATE players
-               SET numWin += 1
-               WHERE playerID= (%s)"""
-    match_report = (winnerID)
-    c.excute(query2,match_report)
-    db.commit()
-
-    query3 = """UPDATE players
-               SET numLoss += 1
-               WHERE playerID = (%s)"""
-    match_report = (loserID)
-    c.execute(query3, match_report)
-    db.commit()
-
-def swiss_paring():
+def swissPairings():
     """Returns a list of pairs of players for the next round of a match.
   
     Assuming that there are an even number of players registered, each player
@@ -113,22 +121,32 @@ def swiss_paring():
         id2: the second player's unique id
         name2: the second player's name
     """
-    db = connect('tournament.db')
+    db = connect()
     c = db.cursor()
-    match_paring=[]
-    query = """SELECT playerID, playerName
-               FROM players
-               ORDER BY numWin desc"""
+    query = """SELECT playerID, playerName,
+    (SELECT count(*)
+        FROM matches
+        WHERE players.playerID=matches.winner)
+    AS num_win,
+    (SELECT count(*)
+        FROM matches
+        WHERE players.playerID=matches.winner
+        OR players.playerID=matches.loser)
+    AS num_matches
+    FROM players
+    ORDER BY num_win DESC;"""
     c.execute(query)
-    2rows = c.fetchmany(2)
-    while 2rows:
-        pair=[]
-        for row in 2rows:
-             pair += list(row)
-        match_pairing.append(pair)
-        2rows = c.fetchmany(2)
-    db.close()
+    matches = c.fetchall()
+    match_pairing = []
+    count = len(matches)
+
+    for i in range(0, count-1, 2):
+        pairs = (matches[i][0], matches[i][1], matches[i+1][0], matches[i+1][1])
+        match_pairing.append(pairs)
+
     return match_pairing
+    db.close()
+    
     
 
     
