@@ -14,7 +14,12 @@ This project has two parts: defining the database schema (SQL table definitions)
 ## Requirements
 You will need to have vagrant and virtual box installed, for instructions on vagrant go to [install vagrant](https://www.vagrantup.com/) for instruction on virtual box go to [install virtual box](https://www.virtualbox.org/).
 You will also need [postresql](https://wiki.postgresql.org/wiki/Detailed_installation_guides) and [psycopg2](https://pypi.python.org/pypi/psycopg2)
-
+1. Install Vagrant and VirtualBox
+Clone the fullstack-nanodegree-vm repository
+Launch the Vagrant VM
+Write SQL database and table definitions in a file (tournament.sql)
+Write Python functions filling out a template of an API (tournament.py)
+Run a test suite to verify your code (tournament_test.py)
 
 ## Steps
 
