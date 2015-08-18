@@ -1,28 +1,11 @@
 /*
 ### tournaments.sql - schema file for storing tournament data
 
-The database schema is composed of three tables (tournaments, contestants, and
-matches) as described below. The database adheres to (at least) 1NF and 5NF for
-the following reasons:
+The database schema is composed of 2 TABLES (players, match) and
+1 VIEW as described below. 
+*/
 
-1NF - No column stores an array type, so there is no way to insert
-multiple values into a column. All columns use foreign keys or automatically
-generated serials where possible, and default / NOT NULL constrains elsewhere
-to ensure that values can only come from the type's domain.
-
-5NF - No table can be recreated by joining together other tables (without one
-of them being the table itself), so there are no join depedencies, and the
-database is therefore trivially in 5NF.
-
-Despite being a requirement for a "completely Udacious", I chose not to use
-views because none of the queries in the API would be simplified by using a
-view - there are no subqueries or compilcated constraints with more than one
-WHERE clause.
-
-
-
-
-
+/*create a db and set up a connection to it */
 DROP DATABASE IF EXISTS tournament;
 
 CREATE DATABASE tournament;
