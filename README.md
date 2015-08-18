@@ -1,6 +1,7 @@
 
 
 # Fullstack Project 2 - Tournament
+Full instruction [here](https://docs.google.com/document/d/16IgOm4XprTaKxAa8w02y028oBECOoB1EI1ReddADEeY/pub?embedded=true)
 Python module that uses the PostgreSQL database to keep track of players and matches in a game tournament.
 The game tournament will use the Swiss system for pairing up players in each round: players are not eliminated, and each player should be paired with another player with the same number of wins, or as close as possible.
 
@@ -16,10 +17,13 @@ This project has two parts: defining the database schema (SQL table definitions)
 2. Clone the http://github.com/udacity/fullstack-nanodegree-vm (which include vagrant file)
 2. Clone the https://github.com/taro03/tournament
 3. Launch the Vagrant VM
-4. Run a test suite to verify your code (tournament_test.py)
+4. Connect psql to your new database and create tables from the statements written in tournament.sql:
+    -Paste each statement in to psql.
+    -Use the command \i tournament.sql to import the whole file into psql at once.
+5. Run tournament_test.py to verify
 
 
-Expected result
+##Expected result
 ```
 vagrant@vagrant-ubuntu-trusty-32:/vagrant/tournament$ python tournament_test.py 
 1. Old matches can be deleted.
