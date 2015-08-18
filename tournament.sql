@@ -22,8 +22,8 @@ playerID (bigserial, primary key) - The ID number of the players. Since
 playerName (varchar) - The player's actual human name.
 */
 create table players (
-    playerID BIGSERIAL PRIMARY KEY NOT NULL,
-    playerName VARCHAR NOT NULL,
+    playerID BIGSERIAL PRIMARY KEY,
+    playerName VARCHAR NOT NULL
 );
 
 /*
@@ -60,4 +60,3 @@ create view standings as
 	AS num_matches
 	FROM players
 	ORDER BY num_win DESC;
-
