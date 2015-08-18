@@ -10,7 +10,7 @@ def connect(database_name="tournament"):
     try:
         db = psycopg2.connect("dbname={}".format(database_name))
         c = db.cursor()
-        return db, cursor
+        return db, c
     except:
         print ("Could not connect to the database")
 
@@ -41,10 +41,8 @@ def countPlayers():
 
 def registerPlayer(playerName):
     """Adds a player to the tournament database.
-  
     The database assigns a unique serial id number for the player.  (This
     should be handled by your SQL database schema, not in your Python code.)
-  
     Args:
       name: the player's full name (need not be unique).
     """
@@ -73,7 +71,6 @@ def playerStandings():
     db.close()
     return matches
 
-
 def reportMatch(winner, loser):
     """Records the outcome of a single match between two players.
     Args:
@@ -87,8 +84,7 @@ def reportMatch(winner, loser):
     c.execute(query, parameter)
     db.commit()
     db.close()
-    
-
+  
 def swissPairings():
     """Returns a list of pairs of players for the next round of a match.
     
@@ -96,7 +92,6 @@ def swissPairings():
     appears exactly once in the pairings.  Each player is paired with another
     player with an equal or nearly-equal win record, that is, a player adjacent
     to him or her in the standings.
-  
     Returns:
       A list of tuples, each of which contains (id1, name1, id2, name2)
         id1: the first player's unique id
@@ -110,11 +105,9 @@ def swissPairings():
     matches = c.fetchall()
     match_pairing = []
     count = len(matches)
-
     for i in range(0, count-1, 2):
         pairs = (matches[i][0], matches[i][1], matches[i+1][0], matches[i+1][1])
         match_pairing.append(pairs)
-
     return match_pairing
     db.close()
     
