@@ -12,28 +12,14 @@ This project has two parts: defining the database schema (SQL table definitions)
 * tournament_test.py
 
 ## Requirements
-You will need to have vagrant and virtual box installed, for instructions on vagrant go to [install vagrant](https://www.vagrantup.com/) for instruction on virtual box go to [install virtual box](https://www.virtualbox.org/).
-You will also need [postresql](https://wiki.postgresql.org/wiki/Detailed_installation_guides) and [psycopg2](https://pypi.python.org/pypi/psycopg2)
-1. Install Vagrant and VirtualBox
-Clone the fullstack-nanodegree-vm repository
-Launch the Vagrant VM
-Write SQL database and table definitions in a file (tournament.sql)
-Write Python functions filling out a template of an API (tournament.py)
-Run a test suite to verify your code (tournament_test.py)
+1. Install [Vagrant](https://www.vagrantup.com/) and [VirtualBox](https://www.virtualbox.org/)
+2. Clone the http://github.com/udacity/fullstack-nanodegree-vm (which include vagrant file)
+2. Clone the https://github.com/taro03/tournament
+3. Launch the Vagrant VM
+4. Run a test suite to verify your code (tournament_test.py)
 
-## Steps
 
-1. Launch virtual box
-2. cd to this repo
-3. Launch vagrant ``` vagrant up```
-4. Log into vagrant ``` vagrant ssh```
-5. CD to the corresponding directory ``` cd /vagrant/tournament ```
-6. Prep commandline to insert queries ``` psql```
-7. Insert the tables ``` \i tournament.sql```
-8. Exit psql ``` \q ```
-9. Run the tests ``` python tournament_test.py```
-
-You should see the following output <br>
+Expected result
 ```
 vagrant@vagrant-ubuntu-trusty-32:/vagrant/tournament$ python tournament_test.py 
 1. Old matches can be deleted.
