@@ -18,11 +18,7 @@ Full instruction [here](https://docs.google.com/document/d/16IgOm4XprTaKxAa8w02y
 2. Clone the http://github.com/udacity/fullstack-nanodegree-vm (which include vagrant file)
 2. Clone the https://github.com/taro03/tournament
 3. Launch the Vagrant VM
-4. Connect psql to your new database and create tables from the statements written in ```tournament.sql```:
-
-a.Paste each statement in to psql
-b.Use the command ```\i tournament.sql``` to import the whole file into psql at once.
-
+4. Connect psql to your new database and create tables from the statements written in ```tournament.sql```:Use the command ```\i tournament.sql``` to import the whole file into psql at once.
 5. Run ```python [path]]tournament_test.py``` to verify
 
 
