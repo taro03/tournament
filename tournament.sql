@@ -48,7 +48,7 @@ view standing will combine the table players and matches to filter out
 the player order by the most winning. The next match and the final result
 will based on the outcome of this view
 */
-CREATE VIEW standings as
+CREATE VIEW standings AS
 	SELECT players.id, players.name,
 	(SELECT count(matches.winner)
 		FROM matches
@@ -60,3 +60,12 @@ CREATE VIEW standings as
 	AS num_matches
 	FROM players
 	ORDER BY num_win DESC;
+
+/*
+view skip_count to show how many time a player skip a round
+*/
+CREATE VIEW skip_count AS
+	SELECT players.id, players.name, count(matches.winner) AS num_skip
+	FROM players LEFT JOIN matches
+	ON players.id = matches.winner and matches.loser IS NULL
+	GROUP BY players.id;
