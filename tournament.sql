@@ -21,9 +21,9 @@ playerID (bigserial, primary key) - The ID number of the players. Since
 	primary key.
 playerName (varchar) - The player's actual human name.
 */
-create table players (
-    playerID BIGSERIAL PRIMARY KEY,
-    playerName VARCHAR NOT NULL
+CREATE TABLE players (
+    id BIGSERIAL PRIMARY KEY,
+    name VARCHAR NOT NULL
 );
 
 /*
@@ -36,10 +36,10 @@ winner (integer) - The name of the first player; a foreign key for
 loser (intefer) - The name of the second player; a foreign key for
 	this column is players.playername
 */
-create table matches (
-    matchID BIGSERIAL PRIMARY KEY,
-    winner INTEGER REFERENCES players(playerID) NOT NULL,
-    loser INTEGER REFERENCES players(playerID) NOT NULL
+CREATE TABLE matches (
+    id BIGSERIAL PRIMARY KEY,
+    winner INTEGER REFERENCES players(player_id) NOT NULL,
+    loser INTEGER REFERENCES players(player_id) NOT NULL
 );
 
 /*
@@ -48,15 +48,15 @@ view standing will combine the table players and matches to filter out
 the player order by the most winning. The next match and the final result
 will based on the outcome of this view
 */
-create view standings as
-	SELECT players.playerID, players.playerName,
+CREATE VIEW standings as
+	SELECT players.id, players.name,
 	(SELECT count(matches.winner)
 		FROM matches
-		WHERE players.playerID=matches.winner)
+		WHERE players.id=matches.winner OR players.id=matches.loser)
 	AS num_win,
 	(SELECT count(matches.matchID)
 		FROM matches
-		WHERE players.playerID=matches.loser)
+		WHERE players.id=matches.winner OR players.id=matches.loser)
 	AS num_matches
 	FROM players
 	ORDER BY num_win DESC;
