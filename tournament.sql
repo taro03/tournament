@@ -39,7 +39,8 @@ loser (intefer) - The name of the second player; a foreign key for
 CREATE TABLE matches (
     id BIGSERIAL PRIMARY KEY,
     winner INTEGER REFERENCES players(id) NOT NULL,
-    loser INTEGER REFERENCES players(id) NOT NULL
+    loser INTEGER REFERENCES players(id) NOT NULL,
+    CHECK (winner <> loser)
 );
 
 /*
@@ -52,7 +53,7 @@ CREATE VIEW standings AS
 	SELECT players.id, players.name,
 	(SELECT count(matches.winner)
 		FROM matches
-		WHERE players.id=matches.winner OR players.id=matches.loser)
+		WHERE players.id=matches.winner)
 	AS num_win,
 	(SELECT count(matches.id)
 		FROM matches
