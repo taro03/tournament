@@ -17,10 +17,8 @@ def connect(database_name="tournament"):
 def deleteMatches():
     """Remove all the match records from the database."""
     db, c = connect()
-    query = "DELETE FROM players;"
+    query = "DELETE FROM matches;"
     c.execute(query)
-    query1 = "DELETE FROM matches"
-    c.execute(query1)
     db.commit()
     db.close()
 
@@ -107,7 +105,7 @@ def swissPairings():
     
     if num_players%2 == 0:
         for i in range(0, num_players-1, 2):
-            pairs = (matches[i][0], matches[i][1], matches[i+1][0], matches[i+1][1])
+            pairs = (list_player[i][0], list_player[i][1], list_player[i+1][0], list_player[i+1][1])
             match_pairing.append(pairs)
         tuple(match_pairing)
         return match_pairing
