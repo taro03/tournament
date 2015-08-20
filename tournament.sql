@@ -38,8 +38,8 @@ loser (intefer) - The name of the second player; a foreign key for
 */
 CREATE TABLE matches (
     id BIGSERIAL PRIMARY KEY,
-    winner INTEGER REFERENCES players(player_id) NOT NULL,
-    loser INTEGER REFERENCES players(player_id) NOT NULL
+    winner INTEGER REFERENCES players(id) NOT NULL,
+    loser INTEGER REFERENCES players(id) NOT NULL
 );
 
 /*
@@ -54,18 +54,9 @@ CREATE VIEW standings AS
 		FROM matches
 		WHERE players.id=matches.winner OR players.id=matches.loser)
 	AS num_win,
-	(SELECT count(matches.matchID)
+	(SELECT count(matches.id)
 		FROM matches
 		WHERE players.id=matches.winner OR players.id=matches.loser)
 	AS num_matches
 	FROM players
-	ORDER BY num_win DESC;
-
-/*
-view skip_count to show how many time a player skip a round
-*/
-CREATE VIEW skip_count AS
-	SELECT players.id, players.name, count(matches.winner) AS num_skip
-	FROM players LEFT JOIN matches
-	ON players.id = matches.winner and matches.loser IS NULL
-	GROUP BY players.id;
+	ORDER BY num_win DESC, num_matches DESC;
